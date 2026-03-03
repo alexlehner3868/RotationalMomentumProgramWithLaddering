@@ -40,19 +40,7 @@ dfP = dfP.sort_values('Date').set_index('Date').ffill()
 dfAP = dfAP.sort_values('Date').set_index('Date').ffill()
 
 # Run baseline rotational momentum strategy 
-dfChoice, dfPRR = run_rotational_strategy(
-    dfP,
-    dfAP,
-    Aperiods,
-    ShortTermWeight,
-    LongTermWeight,
-    ShortTermVolatilityWeight,
-    Frequency,
-    Delay,
-    momentum,
-    volmomentum,
-    StandsForCash,
-)
+dfChoice, dfPRR = run_rotational_strategy(dfP, dfAP, Aperiods, ShortTermWeight,  LongTermWeight, ShortTermVolatilityWeight, Frequency, Delay, momentum, volmomentum, StandsForCash)
 
 # Apply laddering 
 if LADDERING_ON:

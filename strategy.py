@@ -5,19 +5,7 @@ import numpy as np
 import math
 
 
-def run_rotational_strategy(
-    dfP: pd.DataFrame,
-    dfAP: pd.DataFrame,
-    Aperiods: int,
-    ShortTermWeight: float,
-    LongTermWeight: float,
-    ShortTermVolatilityWeight: float,
-    Frequency: str,
-    Delay: int,
-    momentum: int,
-    volmomentum: int,
-    StandsForCash: str,
-):
+def run_rotational_strategy(dfP, dfAP, Aperiods, shortTermWeight, longTermWeight, shortTermVolatilityWeight, frequency, delay, momentum,volmomentum, StandsForCash):
     # Define parameters 
     Bperiods = 3 * Aperiods + ((3 * Aperiods) // 20) * 2 # longer lookback winder
     Speriods = Aperiods # Window used for volatility calculations 
@@ -41,9 +29,9 @@ def run_rotational_strategy(
         return out
 
     # Caclcuate ranks for each metric
-    dfA_r = rank_rows(dfA, momentum == 1) * ShortTermWeight
-    dfB_r = rank_rows(dfB, momentum == 1) * LongTermWeight
-    dfS_r = rank_rows(dfS, volmomentum == 1) * ShortTermVolatilityWeight
+    dfA_r = rank_rows(dfA, momentum == 1) * shortTermWeight
+    dfB_r = rank_rows(dfB, momentum == 1) * longTermWeight
+    dfS_r = rank_rows(dfS, volmomentum == 1) * shortTermVolatilityWeight
 
     # Compute weighted score of ranks
     dfAll = dfA_r + dfB_r + dfS_r
@@ -59,7 +47,7 @@ def run_rotational_strategy(
     dfPRR = dfAP.pct_change().copy()
 
     # Generate rebalance dates and intesect with actual dates in dfP
-    rebalance_idx = dfP.asfreq(freq=Frequency, method="pad").index
+    rebalance_idx = dfP.asfreq(freq=frequency, method="pad").index
     rebalance_idx = rebalance_idx[rebalance_idx.isin(dfP.index)]
 
     dfPRR["REBALANCE"] = False
@@ -79,7 +67,7 @@ def run_rotational_strategy(
     held = held.ffill()
 
     # Trade delay
-    held_exec = held.shift(Delay).ffill().fillna(StandsForCash)
+    held_exec = held.shift(delay).ffill().fillna(StandsForCash)
 
     # Ensure that data is one-hot-encoded (we are only holding one stock at a time)
     for tkr in dfAP.columns:
