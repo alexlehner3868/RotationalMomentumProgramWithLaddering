@@ -7,6 +7,10 @@ import os
 from strategy import run_rotational_strategy
 from laddering import compute_laddered_returns, infer_n_ladders
 
+"""
+Alexander Lehner 1004947506
+Manni Zhang 1007363407
+"""
 # Define Parameters
 Aperiods_stocks = 40  # Short term lookback window)
 freq_stocks = "2W-FRI"  # How often the we should rebuild portfolio
